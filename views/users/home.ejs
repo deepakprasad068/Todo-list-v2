@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+    <title style="font-family: Georgia, 'Times New Roman', Times, serif; font-weight: bolder; color: hsl(187, 72%, 72%);">
+        Todo List
+    </title>
+</head>
+<body >
+    <!-- As a link -->
+<nav class="navbar bg-body-tertiary" style="background-color:rgb(253, 228, 158)!important;">
+    <div class="container-fluid">
+        <div>
+            <a class="navbar-brand " href="#" style="color:rgb(90, 62, 38); font-family: Georgia, serif; font-weight: bolder ;" >Todo list</a>
+            <!-- Button trigger modal -->
+            <a type="button" class="text-black"  
+                style="  color: rgb(146, 104, 32)!important; text-decoration: none;font-size: large;
+                 font-family:Georgia, 'Times New Roman', Times, serif ; font-weight: bolder; 
+               " data-bs-toggle="modal" data-bs-target="#exampleModal">
+            Create Task
+            </a>
+  
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1"
+             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content" style="background-color:rgba(254, 239, 239, 0.872); border: 2px solid rgb(112, 68, 6);">
+                    <div class="modal-header">
+                    <h3 class="modal-title fs-5" id="exampleModalLabel" style="font-family: Georgia, 'Times New Roman', Times, serif; 
+                    font-weight: bolder; color: rgb(60, 39, 1); font-size: xx-large;">Task</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="task/add" method="post" id="taskform">
+                            <label for="title" class="form-label" style="font-family: Georgia, 'Times New Roman', Times, serif;
+                            font-size:large; color: rgb(105, 50, 2);" >Title of Task</label>
+                            <input type="text" style="background-color:rgba(254, 239, 239, 0.872); border: 2px solid rgb(112, 68, 6);" id="title" name="title" class="form-control">
+                            <label for="desc" class="form-label"style="font-family: Georgia, 'Times New Roman', Times, serif;
+                            font-size:large; color: rgb(105, 50, 2);"  >Description</label>
+                            <div class="input-group">
+                            <textarea class="form-control" style="background-color:rgba(254, 239, 239, 0.872); border: 2px solid rgb(112, 68, 6);" id="desc" name="description" aria-label="With textarea" maxlength="60"></textarea>
+                            </div>
+                      
+                        </form>
+                 
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" form="taskform" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+        </div>
+    
+      <a href="/logout" class="navbar-brand" style="font-family: Georgia,
+       'Times New Roman', Times, serif; font-weight: bolder; color: rgba(198, 79, 9, 0.87);">logout</a>
+      
+    </div>
+  </nav>
+  <div class="p-4">
+    <div class="flex  ml-6 ">
+        <div class="text-center text-capital" style="font-family: Georgia, 'Times New Roman', Times, serif; 
+        font-size:2rem; font-weight: bolder; color: rgb(221, 118, 28);">Welcome Back !</div>
+          <div style="margin-left: 46%;">
+            <img src="<%=person.photo%>" alt="profile pic" width="100px" height="100px"  style="border-radius: 50%; border: 2px solid black;">
+          </div>
+        <h4 class="text-center text-capital mt-3 mb-3"
+        style="font-family: Georgia, 'Times New Roman', Times, serif; 
+        font-size:xx- large; font-weight: bolder; color:rgb(180, 125, 29);"><%=person.username%></h4>
+        <div class="container text-center">
+        <table class="table aline-baseline">
+            <thead>
+              <tr >
+                <th style="color: rgb(112, 68, 6)!important;" scope="col">States</th>
+                <th style="color: rgb(112, 68, 6)!important;" scope="col">Title</th>
+                <th style="color: rgb(112, 68, 6)!important;" scope="col">Description</th>
+                <th style="color: rgb(112, 68, 6)!important;" scope="col">Completed</th>
+                <th style="color: rgb(112, 68, 6)!important;" scope="col">Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+                <%for(task of person.task){%>
+              <tr style=" border-top: 2px solid rgb(112, 68, 6);">
+                <td>
+                  <% if(task.state==true){%>
+                  <input class="form-check-input p-3 mt-0"
+                  type="checkbox" checked disabled  id="<%=task._id%>">
+                  <%}else{%>
+                    <input class="form-check-input p-3 mt-0"
+                    type="checkbox"  disabled  id="<%=task._id%>">
+                    <%}%>
+                </td>
+                <td style="font-family: Georgia, 'Times New Roman', Times, serif;font-weight: 600; color: rgb(221, 118, 28);" ><%=task.title%></td>
+                <td style="font-family: Georgia, 'Times New Roman', Times, serif;font-weight: 600; color: rgb(221, 118, 28);"><%=task.description%></td>
+                <td>
+               
+               <form action="/task/update" method="post">
+                <input type="hidden"name="id"value="<%=task._id%>">
+                <input type="hidden" name="update" value="<%=task.state%>">
+                <%if(!task.state){%>
+                <button class="btn btn-outline-success" type="submit">Done</button>
+                <%}else{%>
+                  <button class="btn btn-outline-warning" type="submit">Undo</button>
+                  <%}%>
+              </form>
+                </td>
+
+
+                <td> 
+                  <form action="/task/remove" method="post">
+                  <input type="hidden"name="_id"value="<%=task._id%>" >
+                  <button class="btn btn-outline-danger" type="submit">Remove</button>
+                </form>
+                 </td>
+              </tr>
+              <tr>
+                <%}%>
+            </tbody>
+          </table>
+       
+  </div>
+<script>
+  
+  const trouble=(id)=>
+  {
+    const checkbox=document.getElementById(id);
+    if(checkbox.checked==true)
+    {
+      checkbox.checked=false
+    } 
+    else{
+      checkbox.checked=true
+    }
+
+
+  }
+
+
+  
+  
+ 
+
+
+</script>
+    
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
